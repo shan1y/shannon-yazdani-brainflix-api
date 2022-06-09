@@ -45,7 +45,7 @@ app.route("/videos").post((req, res) => {
   let videos = getVideos();
   videos.push({
     id: uuidv4(),
-    image: "https://i.imgur.com/l2Xfgpl.jpg",
+    image: "http://localhost:8080/images/Upload-video-preview.jpg",
     title,
     description,
     channel,
