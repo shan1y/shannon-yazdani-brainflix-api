@@ -5,14 +5,18 @@ const { v4: uuidv4 } = require("uuid");
 router.use(express.json());
 const videosFilePath = "./data/videos.json";
 
+//Define function to read API data from videos.json for use in get/post requsts.
 const getVideos = () => {
   return JSON.parse(fs.readFileSync(videosFilePath));
 };
 
+//Router function for get requests at /videos.
 router
   .route("/")
   .get((req, res) => {
+    //get videos data from videos.json
     let videos = getVideos();
+    //copy the array of video objects and assign it to a new variable, then return it as response.
     const basicVideoInfo = videos.map((video) => {
       return {
         title: video.title,
@@ -25,9 +29,11 @@ router
   })
   .post((req, res) => {
     console.log(req.body);
+    //destructure req.body into keys that will be pushed to videos.json file
     const { title, channel, description, comments, timestamp } = req.body;
-    console.log(description);
+    //get current data from videos.json file before new data from req body is pushed.
     let videos = getVideos();
+    //add user data to videos array
     videos.push({
       id: uuidv4(),
       image: "http://localhost:8080/images/Upload-video-preview.jpg",
@@ -39,6 +45,7 @@ router
       views: 0,
       likes: 0,
     });
+    //persist the data with the new object to videos.json
     fs.writeFile(videosFilePath, JSON.stringify(videos), (err) => {
       if (err) console.log(err);
       fs.readFileSync(videosFilePath);
@@ -46,6 +53,7 @@ router
     res.json(videos);
   });
 
+//when user requests /videos/:id, respond with detailed video object (includes comments)
 router.route("/:id").get((req, res) => {
   let requestedId = req.params.id;
   let videos = getVideos();
