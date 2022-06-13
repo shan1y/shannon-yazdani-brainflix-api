@@ -30,7 +30,7 @@ router
   .post((req, res) => {
     console.log(req.body);
     //destructure req.body into keys that will be pushed to videos.json file
-    const { title, channel, description, comments, timestamp } = req.body;
+    const { title, channel, description, timestamp } = req.body;
     //get current data from videos.json file before new data from req body is pushed.
     let videos = getVideos();
     //add user data to videos array
@@ -40,7 +40,7 @@ router
       title,
       description,
       channel,
-      comments,
+      comments: [],
       timestamp: timestamp,
       views: 0,
       likes: 0,
