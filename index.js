@@ -1,9 +1,12 @@
 const express = require("express");
 const app = express();
-const PORT = 8080;
+const dotenv = require("dotenv");
 const cors = require("cors");
 
 const videos = require("./routes/videos");
+
+dotenv.config();
+const PORT = process.env.PORT ?? 8080;
 
 //parse incoming json request and puts parsed data in req
 app.use(express.json());
