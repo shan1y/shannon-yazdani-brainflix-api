@@ -25,7 +25,7 @@ router
         id: video.id,
       };
     });
-    res.json(basicVideoInfo);
+    return res.status(200).send(basicVideoInfo);
   })
   .post((req, res) => {
     console.log(req.body);
