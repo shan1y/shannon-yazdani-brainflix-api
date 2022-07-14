@@ -33,10 +33,12 @@ router
     const { title, channel, description, timestamp } = req.body;
     //get current data from videos.json file before new data from req body is pushed.
     let videos = getVideos();
+
     //add user data to videos array
     videos.push({
       id: uuidv4(),
-      image: "http://localhost:8080/images/Upload-video-preview.jpg",
+      image:
+        "https://brainflix-project-api.herokuapp.com/images/Upload-video-preview.jpg",
       title,
       description,
       channel,
