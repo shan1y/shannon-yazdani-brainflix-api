@@ -71,11 +71,11 @@ router.route("/:id/comments").post((req, res) => {
   const detailedVideoInfo = videos.find((specifiedVideo) => {
     return specifiedVideo.id === requestedId;
   });
-  videos.unshift(req.body)
+  detailedVideoInfo.comments.unshift(req.body)
   fs.writeFile(videosFilePath, JSON.stringify(videos), (err) => {
       fs.readFileSync(videosFilePath);
     });
-  res.status(200).json(req.body);
+  res.status(200).json(detailedVideoInfo);
 });
 
 module.exports = router;
