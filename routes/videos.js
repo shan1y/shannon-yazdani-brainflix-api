@@ -65,18 +65,18 @@ router.route("/:id").get((req, res) => {
   res.json(detailedVideoInfo);
 });
 
-// router.route("/:id/comments").post((req, res) => {
-//   let requestedId = req.params.id;
-//   let videos = getVideos();
-//   const detailedVideoInfo = videos.find((specifiedVideo) => {
-//     return specifiedVideo.id === requestedId;
-//   });
-//   detailedVideoInfo.comments.unshift(req.body)
-//   fs.writeFile(videosFilePath, JSON.stringify(videos), (err) => {
-//       fs.readFileSync(videosFilePath);
-//     });
-//   res.status(200).json(detailedVideoInfo);
-// });
+router.route("/:id/comments").post((req, res) => {
+  let requestedId = req.params.id;
+  let videos = getVideos();
+  const detailedVideoInfo = videos.find((specifiedVideo) => {
+    return specifiedVideo.id === requestedId;
+  });
+  detailedVideoInfo.comments.unshift(req.body)
+  fs.writeFile(videosFilePath, JSON.stringify(videos), (err) => {
+      fs.readFileSync(videosFilePath);
+    });
+  res.status(200).json(detailedVideoInfo);
+});
 
 
 router.route("/:id/:timestamp/delete").delete((req,res) => {
