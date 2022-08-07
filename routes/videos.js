@@ -65,17 +65,32 @@ router.route("/:id").get((req, res) => {
   res.json(detailedVideoInfo);
 });
 
-router.route("/:id/comments").post((req, res) => {
+// router.route("/:id/comments").post((req, res) => {
+//   let requestedId = req.params.id;
+//   let videos = getVideos();
+//   const detailedVideoInfo = videos.find((specifiedVideo) => {
+//     return specifiedVideo.id === requestedId;
+//   });
+//   detailedVideoInfo.comments.unshift(req.body)
+//   fs.writeFile(videosFilePath, JSON.stringify(videos), (err) => {
+//       fs.readFileSync(videosFilePath);
+//     });
+//   res.status(200).json(detailedVideoInfo);
+// });
+
+
+router.route("/:id/:timestamp/delete").delete((req,res) => {
+  console.log(req)
+  let deleteTime = req.params.timestamp;
   let requestedId = req.params.id;
-  let videos = getVideos();
+   let videos = getVideos();
   const detailedVideoInfo = videos.find((specifiedVideo) => {
     return specifiedVideo.id === requestedId;
   });
-  detailedVideoInfo.comments.unshift(req.body)
-  fs.writeFile(videosFilePath, JSON.stringify(videos), (err) => {
-      fs.readFileSync(videosFilePath);
-    });
-  res.status(200).json(detailedVideoInfo);
-});
+  const dataAfterDelete = detailedVideoInfo.comments.filter((unwantedComment)=>{
+   (unwantedComment.timestamp) !==  parseInt(deleteTime)
+  })
+   res.status(200).json(dataAfterDelete);
+})
 
 module.exports = router;
