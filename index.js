@@ -16,6 +16,11 @@ app.use(express.static("public"));
 //load router module in app
 app.use("/videos", videos);
 
+app.get("/", function (req, res) {
+  console.log(req);
+  res.send("Welcome to inStock API!");
+});
+
 app.listen(PORT, () => {
   console.log("Server listening on http://localhost:" + PORT);
 });
