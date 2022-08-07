@@ -65,4 +65,13 @@ router.route("/:id").get((req, res) => {
   res.json(detailedVideoInfo);
 });
 
+router.route("/:id/comments").post((req, res) => {
+  let requestedId = req.params.id;
+  let videos = getVideos();
+  const detailedVideoInfo = videos.find((specifiedVideo) => {
+    return specifiedVideo.id === requestedId;
+  });
+  res.json(req.body);
+});
+
 module.exports = router;
