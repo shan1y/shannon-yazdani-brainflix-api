@@ -18,7 +18,7 @@ app.use("/videos", videos);
 
 app.get("/", function (req, res) {
   console.log(req);
-  res.send("Welcome to inStock API!");
+  res.send("Welcome to BrainFlix API!");
 });
 
 app.listen(PORT, () => {
