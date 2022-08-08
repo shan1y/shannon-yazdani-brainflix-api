@@ -73,8 +73,8 @@ router.route("/:id/comments").post((req, res) => {
   });
   detailedVideoInfo.comments.unshift(req.body)
   fs.writeFile(videosFilePath, JSON.stringify(videos), (err) => {
-      fs.readFileSync(videosFilePath);
-    });
+    fs.readFileSync(videosFilePath);
+  });
   res.status(200).json(detailedVideoInfo);
 });
 
@@ -88,8 +88,16 @@ router.route("/:id/:timestamp/delete").delete((req,res) => {
     return specifiedVideo.id === requestedId;
   });
   const dataAfterDelete = detailedVideoInfo.comments.filter((unwantedComment)=>{
-   (unwantedComment.timestamp) !==  parseInt(deleteTime)
+  return (unwantedComment.timestamp) !==  parseInt(deleteTime)
   })
+
+  const videoIndex = videos.findIndex((selectedVid)=>{
+    return requestedId === selectedVid.id
+  })
+
+   videos[videoIndex].comments = dataAfterDelete;
+
+   fs.writeFileSync(videosFilePath, JSON.stringify(videos));
    res.status(200).json(dataAfterDelete);
 })
 
