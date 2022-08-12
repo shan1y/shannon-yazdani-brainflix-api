@@ -65,40 +65,66 @@ router.route("/:id").get((req, res) => {
   res.json(detailedVideoInfo);
 });
 
+//Comment Post Request
 router.route("/:id/comments").post((req, res) => {
   let requestedId = req.params.id;
   let videos = getVideos();
   const detailedVideoInfo = videos.find((specifiedVideo) => {
     return specifiedVideo.id === requestedId;
   });
-  detailedVideoInfo.comments.unshift(req.body)
+  detailedVideoInfo.comments.unshift(req.body);
   fs.writeFile(videosFilePath, JSON.stringify(videos), (err) => {
     fs.readFileSync(videosFilePath);
   });
   res.status(200).json(detailedVideoInfo);
 });
 
-
-router.route("/:id/:timestamp/delete").delete((req,res) => {
-  console.log(req)
+//Comment Delete request
+router.route("/:id/:timestamp/delete").delete((req, res) => {
   let deleteTime = req.params.timestamp;
   let requestedId = req.params.id;
-   let videos = getVideos();
+  let videos = getVideos();
   const detailedVideoInfo = videos.find((specifiedVideo) => {
     return specifiedVideo.id === requestedId;
   });
-  const dataAfterDelete = detailedVideoInfo.comments.filter((unwantedComment)=>{
-  return (unwantedComment.timestamp) !==  parseInt(deleteTime)
-  })
+  const dataAfterDelete = detailedVideoInfo.comments.filter(
+    (unwantedComment) => {
+      return unwantedComment.timestamp !== parseInt(deleteTime);
+    }
+  );
+  const videoIndex = videos.findIndex((selectedVid) => {
+    return requestedId === selectedVid.id;
+  });
+  videos[videoIndex].comments = dataAfterDelete;
+  fs.writeFileSync(videosFilePath, JSON.stringify(videos));
+  res.status(200).json(dataAfterDelete);
+});
 
-  const videoIndex = videos.findIndex((selectedVid)=>{
-    return requestedId === selectedVid.id
-  })
+//Put request for liking and unliking a comment
+router.route("/:id/comments/:timestamp/like").patch((req, res) => {
+  let videos = getVideos();
+  let requestedVidId = req.params.id
+  let reqTimestamp = req.params.timestamp
+  const detailedVideoInfo = videos.find((specifiedVideo) => {
+    return specifiedVideo.id === requestedVidId;
+  });
 
-   videos[videoIndex].comments = dataAfterDelete;
+  let index = detailedVideoInfo.comments.findIndex(
+    (item) => item.timestamp === Number(reqTimestamp)
+  );
 
-   fs.writeFileSync(videosFilePath, JSON.stringify(videos));
-   res.status(200).json(dataAfterDelete);
-})
+  console.log((detailedVideoInfo.comments[index]["likes"]))
+  if(detailedVideoInfo.comments[index]["likes"] === 0){
+    detailedVideoInfo.comments[index]["likes"]=1
+  } else if(detailedVideoInfo.comments[index]["likes"]=="1") {
+    detailedVideoInfo.comments[index]["likes"]=0
+  }
+  const videoIndex = videos.findIndex((vid) => {
+    return requestedVidId === vid.id;
+  });
+  videos[videoIndex].comments = detailedVideoInfo.comments
+  fs.writeFileSync(videosFilePath, JSON.stringify(videos));
+res.json(detailedVideoInfo.comments[index])
+});
 
 module.exports = router;
