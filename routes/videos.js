@@ -113,15 +113,12 @@ router.route("/:id/comments/:timestamp/like").patch((req, res) => {
     (item) => item.timestamp === Number(reqTimestamp)
   );
 
-  // console.log((detailedVideoInfo.comments[index]["likes"]))
 
-  detailedVideoInfo.comments[index]["likes"] =  detailedVideoInfo.comments[index]["likes"] + 1
-
-  // if(detailedVideoInfo.comments[index]["likes"] === 0){
-  //   detailedVideoInfo.comments[index]["likes"]=1
-  // } else if(detailedVideoInfo.comments[index]["likes"]=="1") {
-  //   detailedVideoInfo.comments[index]["likes"]=0
-  // }
+  if(detailedVideoInfo.comments[index]["likes"] === 0){
+    detailedVideoInfo.comments[index]["likes"]=1
+  } else if(detailedVideoInfo.comments[index]["likes"]=="1") {
+    detailedVideoInfo.comments[index]["likes"]=0
+  }
   const videoIndex = videos.findIndex((vid) => {
     return requestedVidId === vid.id;
   });
